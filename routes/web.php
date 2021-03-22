@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Post;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,9 +27,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/posts', function () {
-        return view('posts' , ['posts' => Post::paginate(5)]);
-    })->name('posts');
+    Route::get('/posts', [PostController::class, 'index'])->name('posts');
 
     Route::get('/orders', function () {
         return view('orders');
