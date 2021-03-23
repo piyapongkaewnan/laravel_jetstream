@@ -43,6 +43,11 @@
                     {{ __('Log in') }}
                 </x-jet-button>
             </div>
+
+            <div class="block mt-6">
+               <a href="/sign-in/github" class="btn btn-gray btn-block"><i class="fab fa-github"></i> Sign In with Github</a>
+            </div>
+
         </form>
     </x-jet-authentication-card>
 </x-guest-layout>

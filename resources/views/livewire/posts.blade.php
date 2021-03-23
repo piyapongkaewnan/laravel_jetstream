@@ -25,14 +25,14 @@
         <x-slot name="content">
             <div class="col-span-6 sm:col-span-4 mb-4">
                 <x-jet-label for="title" value="{{ __('Title') }}" />
-                <x-jet-input id="title" type="text" class="mt-1 block w-full" wire:model.defer="state.title" />
+                <x-jet-input id="title" type="text" class="mt-1 block w-full text-sm" wire:model.defer="state.title" />
                 <x-jet-input-error for="title" class="mt-2" />
             </div>
 
             <!-- body -->
             <div class="col-span-6 sm:col-span-4">
                 <x-jet-label for="body" value="{{ __('Body') }}" />
-                <x-jet-input id="body" type="text" class="mt-1 block w-full" wire:model.defer="state.body" />
+                <x-jet-input id="body" type="text" class="mt-1 block w-full text-sm" wire:model.defer="state.body" />
                 <x-jet-input-error for="body" class="mt-2" />
             </div>
         </x-slot>

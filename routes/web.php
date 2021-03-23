@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,12 +15,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 // Route::middleware(['auth'])->get('/', function () {
 //     return view('welcome');
 // })->name('home');
+
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/', function () {
+        return view('welcome');
+    });
+
+    Route::get('/sign-in/github' , [LoginController::class , 'github']);
+
+    Route::get('/sign-in/github/redirect' , [LoginController::class , 'githubRedirect']);
+
+});
+
 
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
@@ -36,6 +47,4 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('/projects', function () {
         return view('projects');
     })->name('projects');
-
-
 });
