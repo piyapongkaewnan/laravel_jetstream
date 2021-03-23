@@ -25,12 +25,23 @@ Route::group(['middleware' => 'guest'], function () {
         return view('welcome');
     });
 
-    Route::get('/sign-in/github' , [LoginController::class , 'github']);
+    Route::prefix('auth')->group(function () {
+        Route::get('/{provider}', [LoginController::class, 'redirectToProvider'])->name('auth.provider');
+        Route::get('/{provider}/callback', [LoginController::class, 'handleProviderCallback'])->name('auth.provider.callback');
+    });
 
-    Route::get('/sign-in/github/redirect' , [LoginController::class , 'githubRedirect']);
+    // // Google
+    // Route::get('/auth/google', [LoginController::class, 'google']);
+    // Route::get('/auth/google/redirect', [LoginController::class, 'googleRedirect']);
 
+    // // Facebook
+    // Route::get('/auth/facebook', [LoginController::class, 'facebook']);
+    // Route::get('/auth/facebook/redirect', [LoginController::class, 'facebookRedirect']);
+
+    // // Github
+    // Route::get('/auth/github', [LoginController::class, 'github']);
+    // Route::get('/auth/github/redirect', [LoginController::class, 'githubRedirect']);
 });
-
 
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {

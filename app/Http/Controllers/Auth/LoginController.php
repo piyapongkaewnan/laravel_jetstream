@@ -4,34 +4,93 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
-use Str;
-use Hash;
+use Illuminate\Support\Str;
 use App\Models\User;
 
 class LoginController extends Controller
 {
-    public function github()
+
+    public function redirectToProvider($provider = 'google')
     {
-        // Send the user's request to github
-        return Socialite::driver('github')->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 
-    public function githubRedirect()
+    public function handleProviderCallback($provider = 'google')
     {
-        // get oauth request back from github to authenticate user
-        $user = Socialite::driver('github')->stateless()->user();
+        $providerUser = Socialite::driver($provider)->user();
 
-        $user = User::firstOrCreate([
-            'email' => $user->email
-        ], [
-            'name' => $user->name,
-            'password' => Hash::make(Str::random(24))
-        ]);
+        $this->firstOrCreateUser($providerUser);
+
+        return redirect()->to('/dashboard');
+    }
+
+
+    // // Google oauth
+    // public function google()
+    // {
+    //     // Send the user's request to google
+    //     return Socialite::driver('google')->redirect();
+    // }
+
+    // public function googleRedirect()
+    // {
+    //     // get oauth request back from google to authenticate user
+    //     $user = Socialite::driver('google')->user();
+
+    //     $this->firstOrCreateUser($user);
+
+    //     return redirect('/dashboard');
+    // }
+
+
+    // // Facebook oauth
+    // public function facebook()
+    // {
+    //     // Send the user's request to facebook
+    //     return Socialite::driver('facebook')->redirect();
+    // }
+
+    // public function facebookRedirect()
+    // {
+    //     // get oauth request back from github to authenticate user
+    //     $user = Socialite::driver('facebook')->user();
+
+    //     $this->firstOrCreateUser($user);
+
+    //     return redirect('/dashboard');
+    // }
+
+    // // Github oauth
+    // public function github()
+    // {
+    //     // Send the user's request to github
+    //     return Socialite::driver('github')->redirect();
+    // }
+
+    // public function githubRedirect()
+    // {
+    //     // get oauth request back from github to authenticate user
+    //     $user = Socialite::driver('github')->user();
+
+    //     $this->firstOrCreateUser($user);
+
+    //     return redirect('/dashboard');
+    // }
+
+    private function firstOrCreateUser($user)
+    {
+        $user = User::firstOrCreate(
+            [
+                'email' => $user->email
+            ],
+            [
+                'name' => $user->name,
+                'password' => bcrypt(Str::random(24))
+            ]
+        );
 
         Auth::login($user, true);
-
-        return redirect('/dashboard');
     }
 }
